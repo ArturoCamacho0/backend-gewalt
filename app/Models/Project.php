@@ -25,11 +25,6 @@ class Project extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function objectives()
-    {
-        return $this->hasMany(Objective::class, 'project_id');
-    }
-
     public function tasks()
     {
         return $this->hasMany(Task::class, 'project_id');
