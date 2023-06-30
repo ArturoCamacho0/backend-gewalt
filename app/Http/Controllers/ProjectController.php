@@ -16,7 +16,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::with(['user', 'tasks'])->get();
+        $projects = Project::withCount('tasks')->get();
 
         return response()->json($projects);
     }
@@ -51,6 +52,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $project->load(['user', 'tasks']);
+        $project->loadCount('tasks');
+
         return response()->json($project);
     }
 
