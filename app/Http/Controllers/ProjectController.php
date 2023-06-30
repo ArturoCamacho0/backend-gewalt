@@ -16,9 +16,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with(['user', 'tasks'])
-        ->withCount('tasks')
-        ->get();
+        $projects = Project::with(['user'])
+            ->withCount(['tasks' => function ($query) {
+            $query->whereIn('status', ['in_progress', 'pending']);
+        }])->get();
 
         return response()->json($projects);
     }
