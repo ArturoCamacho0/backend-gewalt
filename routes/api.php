@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('projects/inactive', [ProjectController::class, 'getInactiveProjects']);
     Route::get('projects/active/amount', [ProjectController::class, 'getActiveProjectsCount']);
     Route::get('projects/inactive/amount', [ProjectController::class, 'getInactiveProjectsCount']);
+    Route::delete('projects/{projectId}/tasks', [ProjectController::class, 'deleteTasks']);
 
     Route::resource('services', ServiceController::class);
 

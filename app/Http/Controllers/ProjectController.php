@@ -144,4 +144,17 @@ class ProjectController extends Controller
 
         return response()->json(['count' => $count]);
     }
+
+    public function deleteTasks(Request $request, $projectId)
+{
+    $taskIds = $request->input('taskIds');
+
+    try {
+        Task::whereIn('id', $taskIds)->delete();
+
+        return response()->json(['message' => 'Tasks deleted successfully']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to delete tasks'], 500);
+    }
+}
 }
