@@ -67,7 +67,7 @@ class TaskController extends Controller
             'description' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'status' => 'required',
+            'status' => 'required|in:pending,in_progress,finished,canceled',
             'project_id' => 'required',
             'user_id' => 'required',
         ]);
