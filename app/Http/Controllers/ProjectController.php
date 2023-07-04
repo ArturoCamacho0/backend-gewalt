@@ -150,6 +150,7 @@ class ProjectController extends Controller
     {
         $taskIds = $request->input('taskIds');
 
+<<<<<<< Updated upstream
         try {
             Task::whereIn('id', $taskIds)->delete();
 
@@ -157,5 +158,13 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to delete tasks'], 500);
         }
+=======
+    try {
+        Task::whereIn('task_id', $taskIds)->delete();
+
+        return response()->json(['message' => 'Tasks deleted successfully']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e], 500);
+>>>>>>> Stashed changes
     }
 }
