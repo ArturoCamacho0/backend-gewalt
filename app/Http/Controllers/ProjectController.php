@@ -38,7 +38,7 @@ class ProjectController extends Controller
             'description' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'status' => 'boolean',
+            'status' => 'required|in:in_progress,finished,canceled',
             'user_id' => 'required',
         ]);
 
