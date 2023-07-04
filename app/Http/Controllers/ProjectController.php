@@ -75,7 +75,7 @@ class ProjectController extends Controller
             'description' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'status' => 'boolean',
+            'status' => 'required|in:in_progress,finished,canceled',
             'user_id' => 'required',
         ]);
 
@@ -147,15 +147,15 @@ class ProjectController extends Controller
     }
 
     public function deleteTasks(Request $request, $projectId)
-{
-    $taskIds = $request->input('taskIds');
+    {
+        $taskIds = $request->input('taskIds');
 
-    try {
-        Task::whereIn('id', $taskIds)->delete();
+        try {
+            Task::whereIn('id', $taskIds)->delete();
 
-        return response()->json(['message' => 'Tasks deleted successfully']);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to delete tasks'], 500);
+            return response()->json(['message' => 'Tasks deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete tasks'], 500);
+        }
     }
-}
 }
