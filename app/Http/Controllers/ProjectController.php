@@ -129,7 +129,7 @@ class ProjectController extends Controller
      */
     public function getActiveProjectsCount()
     {
-        $count = Project::where('status', true)->count();
+        $count = Project::whereIn('status', ['pending', 'in_progress'])->count();
 
         return response()->json(['count' => $count]);
     }
@@ -141,7 +141,7 @@ class ProjectController extends Controller
      */
     public function getInactiveProjectsCount()
     {
-        $count = Project::where('status', false)->count();
+        $count = Project::whereIn('status', ['finished','canceled'])->count();
 
         return response()->json(['count' => $count]);
     }
@@ -150,7 +150,6 @@ class ProjectController extends Controller
     {
         $taskIds = $request->input('taskIds');
 
-<<<<<<< Updated upstream
         try {
             Task::whereIn('id', $taskIds)->delete();
 
@@ -158,13 +157,5 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to delete tasks'], 500);
         }
-=======
-    try {
-        Task::whereIn('task_id', $taskIds)->delete();
-
-        return response()->json(['message' => 'Tasks deleted successfully']);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e], 500);
->>>>>>> Stashed changes
     }
 }
