@@ -98,29 +98,40 @@ class ClientController extends Controller
     {
         $request->validate([
             'client_id' => 'required',
-            'project_id' => 'required',
+            'project_ids' => 'required|array',
+            'project_ids.*' => 'exists:projects,project_id', // Validar que todos los IDs de proyectos existan en la tabla "projects"
         ]);
 
         $client = Client::findOrFail($request->input('client_id'));
-        $project = Project::findOrFail($request->input('project_id'));
+        $projectIds = $request->input('project_ids');
 
-        // Check if the project is already assigned to the client
-        $existingAssignment = ClientProject::where('client_id', $client->id)
-            ->where('project_id', $project->id)
-            ->first();
+        // Retrieve existing assignments for the client
+        $existingAssignments = ClientProject::where('client_id', $client->id)
+            ->whereIn('project_id', $projectIds)
+            ->pluck('project_id')
+            ->toArray();
 
-        if ($existingAssignment) {
+        $newAssignments = [];
+
+        foreach ($projectIds as $projectId) {
+            if (!in_array($projectId, $existingAssignments)) {
+                $newAssignments[] = [
+                    'client_id' => $client->id,
+                    'project_id' => $projectId,
+                ];
+            }
+        }
+
+        if (empty($newAssignments)) {
             return response()->json([
-                'message' => 'El proyecto ya está asignado al cliente.',
+                'message' => 'Los proyectos ya están asignados al cliente.',
             ], Response::HTTP_CONFLICT);
         }
 
-        // Create a new assignment
-        $assignment = ClientProject::create([
-            'client_id' => $client->id,
-            'project_id' => $project->id,
-        ]);
+        // Create new assignments
+        $assignments = ClientProject::insert($newAssignments);
 
-        return response()->json($assignment, Response::HTTP_CREATED);
+        return response()->json($assignments, Response::HTTP_CREATED);
     }
+
 }
