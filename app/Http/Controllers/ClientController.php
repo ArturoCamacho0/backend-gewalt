@@ -107,7 +107,7 @@ class ClientController extends Controller
         $projectIds = $request->input('project_ids');
 
         // Retrieve existing assignments for the client
-        $existingAssignments = ClientProject::where('client_id', $client->id)
+        $existingAssignments = ClientProject::where('client_id', $client->client_id)
             ->whereIn('project_id', $projectIds)
             ->pluck('project_id')
             ->toArray();
@@ -117,7 +117,7 @@ class ClientController extends Controller
         foreach ($projectIds as $projectId) {
             if (!in_array($projectId, $existingAssignments)) {
                 $newAssignments[] = [
-                    'client_id' => $client->id,
+                    'client_id' => $client->client_id,
                     'project_id' => $projectId,
                 ];
             }
