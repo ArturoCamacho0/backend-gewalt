@@ -33,5 +33,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('suppliers', SupplierController::class);
 
     Route::resource('tasks', TaskController::class);
-    Route::resource('tasks/pending/count', [TaskController::class, 'countPendingAndInProgressTasks']);
+    Route::get('tasks/pending/count', [TaskController::class, 'countPendingAndInProgressTasks']);
 });
