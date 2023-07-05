@@ -135,4 +135,20 @@ class ClientController extends Controller
         return response()->json($assignments, Response::HTTP_CREATED);
     }
 
+    /**
+     * Get the projects assigned to a client.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getAssignedProjects($clientId)
+    {
+        $client = Client::findOrFail($clientId);
+
+        $assignedProjects = ClientProject::where('client_id', $client->client_id)
+            ->with('project')
+            ->get();
+
+        return response()->json($assignedProjects);
+    }
 }
