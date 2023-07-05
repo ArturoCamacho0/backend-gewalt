@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
@@ -157,5 +158,17 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to delete tasks'], 500);
         }
+    }
+
+    public function getUpcomingProjects()
+    {
+        $today = now()->startOfDay();
+        $endOfWeek = now()->endOfWeek();
+
+        $projects = Project::where('end_date', '>=', $today)
+            ->where('end_date', '<=', $endOfWeek)
+            ->get();
+
+        return response()->json($projects);
     }
 }
