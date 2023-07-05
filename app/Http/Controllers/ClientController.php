@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\ClientProject;
 
 class ClientController extends Controller
 {
