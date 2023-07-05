@@ -87,4 +87,40 @@ class ClientController extends Controller
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
+
+    /**
+     * Assign a project to a client.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function assignProject(Request $request)
+    {
+        $request->validate([
+            'client_id' => 'required',
+            'project_id' => 'required',
+        ]);
+
+        $client = Client::findOrFail($request->input('client_id'));
+        $project = Project::findOrFail($request->input('project_id'));
+
+        // Check if the project is already assigned to the client
+        $existingAssignment = ClientProject::where('client_id', $client->id)
+            ->where('project_id', $project->id)
+            ->first();
+
+        if ($existingAssignment) {
+            return response()->json([
+                'message' => 'El proyecto ya está asignado al cliente.',
+            ], Response::HTTP_CONFLICT);
+        }
+
+        // Create a new assignment
+        $assignment = ClientProject::create([
+            'client_id' => $client->id,
+            'project_id' => $project->id,
+        ]);
+
+        return response()->json($assignment, Response::HTTP_CREATED);
+    }
 }
