@@ -20,8 +20,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('users', UserController::class);
 
     Route::resource('clients', ClientController::class);
-    Route::post('/clients/assign-project', [ClientController::class, 'assignProject']);
-    Route::post('/clients/projects', [ClientController::class, 'assignProject']);
+    Route::get('/clients/projects/{projectId}', [ClientController::class, 'getAssignedClients']);
 
     Route::resource('companies', CompanyController::class);
 
