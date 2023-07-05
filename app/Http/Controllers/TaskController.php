@@ -89,4 +89,11 @@ class TaskController extends Controller
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function countPendingAndInProgressTasks()
+    {
+        $pendingTasksCount = Task::whereIn('status', ['pending', 'in_progress'])->count();
+
+        return response()->json(['pending_tasks' => $pendingTasksCount]);
+    }
 }
