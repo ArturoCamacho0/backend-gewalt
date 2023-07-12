@@ -142,16 +142,20 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function getAssignedProjects($clientId)
+    public function getNotAssignedProjects($clientId)
     {
         $client = Client::findOrFail($clientId);
 
-        $assignedProjects = ClientProject::where('client_id', $client->client_id)
-            ->with('project')
+        $assignedProjectIds = ClientProject::where('client_id', $client->client_id)
+            ->pluck('project_id')
+            ->toArray();
+
+        $notAssignedProjects = Project::whereNotIn('project_id', $assignedProjectIds)
             ->get();
 
-        return response()->json($assignedProjects);
+        return response()->json($notAssignedProjects);
     }
+
 
     /**
      * Get the clients assigned to a project.
