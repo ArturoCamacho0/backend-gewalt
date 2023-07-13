@@ -16,9 +16,10 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::all();
+        $perPage = $request->query('perPage', 10);
+        $clients = Client::paginate($perPage);
 
         return response()->json($clients);
     }

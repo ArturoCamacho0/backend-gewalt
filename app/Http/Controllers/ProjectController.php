@@ -16,12 +16,16 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->input('perPage', 10);
+        $page = $request->input('page', 1);
+
         $projects = Project::with(['user'])
             ->withCount(['tasks' => function ($query) {
-            $query->whereIn('status', ['in_progress', 'pending']);
-        }])->get();
+                $query->whereIn('status', ['in_progress', 'pending']);
+            }])
+            ->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json($projects);
     }
