@@ -19,7 +19,8 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('perPage', 10);
-        $clients = Client::paginate($perPage);
+        $currentPage = $request->query('page', 1);
+        $clients = Client::paginate($perPage, ['*'], 'page', $currentPage);
 
         return response()->json($clients);
     }
